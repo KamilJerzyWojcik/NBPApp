@@ -21,7 +21,7 @@ namespace NBPApp.Models.Mappers
             )
             .ForMember(
                 dest => dest.Mid,
-                opt => opt.MapFrom(src => src.Mid)
+                opt => opt.MapFrom(src => src.Mid.HasValue ? src.Mid : src.Bid + src.Ask / 2)
             );
         }
 

@@ -1,6 +1,26 @@
 ﻿@model IEnumerable<CurrencyViewModel>
 
-@foreach(var c in Model)
-{
-    <p>@c.Code</p>
-}
+
+
+<table class='table table-striped'>
+    <thead>
+        <tr>
+            <th>Skrót</th>
+            <th>Nazwa</th>
+            <th>Średni kurs</th>
+            <th>Data</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model)
+        {
+            <tr>
+                <td>@c.Code</td>
+                <td>@c.Currency</td>
+                <td>@c.Mid</td>
+                <td>@c.EffectiveDate.ToShortDateString()</td>
+            </tr>
+
+        }
+    </tbody>
+</table>
