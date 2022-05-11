@@ -13,15 +13,16 @@ namespace NBPApp.Models
         private HttpClient client;
         private Uri url(string tableType) => new Uri($"http://api.nbp.pl/api/exchangerates/tables/{tableType}");
         private Uri baseAdress => new Uri("http://api.nbp.pl/");
-        private string[] tableTypes => new string[] { "a", "b", "c" };
 
         public INBPHelper NBPHelper { get; }
         public IHttpClientFactory HttpClientFactory { get; }
+        public HttpResponseMessage CurrenctResponse { get; private set; }
 
         public NBPApiClient(INBPHelper nBPHelper, IHttpClientFactory httpClientFactory)
         {
             NBPHelper = nBPHelper;
             HttpClientFactory = httpClientFactory;
+            cofigureClient();
         }
 
         private NBPApiClient cofigureClient()
@@ -32,48 +33,31 @@ namespace NBPApp.Models
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(NBPHelper.GetTypeMedia()));
             return this;
         }
-
-        private void addData(List<CurrencyDto> data, string result)
+        
+        private async Task<bool> SetResult(Response response)
         {
+            string result = await response.HttpResponseMessage.Content.ReadAsStringAsync();
             NBPHelper.SetResult(result);
-            NBPHelper.AddData(data);
+            return true;
         }
-
-        private async Task<List<CurrencyDto>> getAsync(string path)
+        
+        public async Task<Response> GetResponse(string tableType)
         {
-            var data = new List<CurrencyDto>();
+            var path = url(tableType.ToLower()).PathAndQuery;
             var response = await client.GetAsync(path);
-            if (response.IsSuccessStatusCode)
-            {
-                string result = await response.Content.ReadAsStringAsync();
-                addData(data, result);
-            }
-            return data;
+            return new Response { IsSuccess = response.IsSuccessStatusCode, HttpResponseMessage = response};
         }
 
-        private async Task<IEnumerable<CurrencyDto>> runAsync()
+        public async Task<IEnumerable<CurrencyDto>> GetData(Response response)
         {
-
-            var currencies = new List<CurrencyDto>();
-            try
-            {
-                foreach (var t in tableTypes)
-                {
-                    var result = await getAsync(url(t).PathAndQuery);
-                    currencies.AddRange(result);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-
-            return currencies;
+            await SetResult(response);
+            return NBPHelper.GetData();
         }
 
-        public IEnumerable<CurrencyDto> Get()
+        public async Task<IEnumerable<CurrencyDto>> GetDataRange(Response response)
         {
-            return cofigureClient().runAsync().GetAwaiter().GetResult();
+            await SetResult(response);
+            return NBPHelper.GetDataRange();
         }
     }
 }

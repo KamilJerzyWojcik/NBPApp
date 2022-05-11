@@ -15,18 +15,26 @@ namespace NBPApp.Services
             xmlDoc = getXmlDocumentFromString(result);
         }
 
-        public void AddData(List<CurrencyDto> data)
+        public List<CurrencyDto> GetData()
         {
-            string tableType = getTableType();
+            List<CurrencyDto> data = new List<CurrencyDto>();
             string effectiveDate = getEffectiveDate();
             foreach (XmlNode node in xmlDoc.DocumentElement.LastChild.LastChild.ChildNodes)
             {
-                if (tableType == "A" || tableType == "B")
-                    data.Add(getCurrencyDto(node, effectiveDate));
-
-                if (tableType == "C")
-                    data.Add(getCurrencyDtoRange(node, effectiveDate));
+                data.Add(getCurrencyDto(node, effectiveDate));
             }
+            return data;
+        }
+
+        public List<CurrencyDto> GetDataRange()
+        {
+            List<CurrencyDto> data = new List<CurrencyDto>();
+            string effectiveDate = getEffectiveDate();
+            foreach (XmlNode node in xmlDoc.DocumentElement.LastChild.LastChild.ChildNodes)
+            {
+                data.Add(getCurrencyDtoRange(node, effectiveDate));
+            }
+            return data;
         }
 
         public string GetTypeMedia() => typeMedia;
@@ -68,6 +76,6 @@ namespace NBPApp.Services
 
         private string getEffectiveDate() => xmlDoc.DocumentElement.LastChild.ChildNodes[2].InnerText;
 
-        private string getTableType() => xmlDoc.DocumentElement.LastChild.FirstChild.InnerText;
+        public string GetTableType() => xmlDoc.DocumentElement.LastChild.FirstChild.InnerText;
     }
 }

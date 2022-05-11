@@ -6,7 +6,8 @@ namespace NBPApp.Services
     public interface INBPHelper
     {
         void SetResult(string result);
-        void AddData(List<CurrencyDto> data);
+        List<CurrencyDto> GetData();
         string GetTypeMedia();
+        List<CurrencyDto> GetDataRange();
     }
 }

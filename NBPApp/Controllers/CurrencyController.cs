@@ -6,6 +6,7 @@ using NBPApp.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace NBPApp.Controllers
 {
@@ -13,27 +14,27 @@ namespace NBPApp.Controllers
     {
         public readonly IMapper _mapper;
         private readonly ICurrencyRepository currentRepository;
-        private readonly INBPApiClient nBPApiClient;
+        private readonly INBPService NBPService;
 
-        public CurrencyController(IMapper mapper, ICurrencyRepository currentRepository, INBPApiClient nBPApiClient)
+        public CurrencyController(IMapper mapper, ICurrencyRepository currentRepository, INBPService NBPService)
         {
             _mapper = mapper;
             this.currentRepository = currentRepository;
-            this.nBPApiClient = nBPApiClient;
+            this.NBPService = NBPService;
         }
 
-        public IActionResult Update()
+        public async Task<IActionResult> Update()
         {
-            var data = nBPApiClient.Get();
+            var data = await NBPService.GetCurrenciesData();
             currentRepository.UpdateRange(data);
             return Redirect(nameof(Index));
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             if(currentRepository.GetAll().Count() == 0)
             {
-                var data = nBPApiClient.Get();
+                var data = await NBPService.GetCurrenciesData();
                 currentRepository.AddRange(data);
             }  
             

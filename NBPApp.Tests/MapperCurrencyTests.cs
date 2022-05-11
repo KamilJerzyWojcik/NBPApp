@@ -1,9 +1,7 @@
 using AutoMapper;
 using NBPApp.Models;
 using NBPApp.Models.Mappers;
-using NBPApp.Services;
 using System;
-using System.Net.Http;
 using Xunit;
 
 namespace NBPApp.Tests
