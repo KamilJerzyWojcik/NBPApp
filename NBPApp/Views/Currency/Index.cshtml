@@ -17,7 +17,7 @@
             <tr>
                 <td>@c.Code</td>
                 <td>@c.Currency</td>
-                <td>@c.Mid</td>
+                <td>@c.Mid @if (c.Ask.HasValue) {<span> Ask: @c.Ask</span><span> Bid: @c.Bid</span>}</td>
                 <td>@c.EffectiveDate.ToShortDateString()</td>
             </tr>
 

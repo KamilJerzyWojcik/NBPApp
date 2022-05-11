@@ -22,6 +22,12 @@ namespace NBPApp.Models.Mappers
             .ForMember(
                 dest => dest.Mid,
                 opt => opt.MapFrom(src => src.Mid.HasValue ? src.Mid : (src.Bid + src.Ask) / 2)
+            ).ForMember(
+                dest => dest.Bid,
+                opt => opt.MapFrom(src => src.Bid)
+            ).ForMember(
+                dest => dest.Ask,
+                opt => opt.MapFrom(src => src.Ask)
             );
         }
 

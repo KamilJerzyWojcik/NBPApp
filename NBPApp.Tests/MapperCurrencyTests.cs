@@ -1,7 +1,9 @@
 using AutoMapper;
 using NBPApp.Models;
 using NBPApp.Models.Mappers;
+using NBPApp.Services;
 using System;
+using System.Net.Http;
 using Xunit;
 
 namespace NBPApp.Tests
@@ -34,6 +36,8 @@ namespace NBPApp.Tests
             Assert.Equal(mapped.Currency, toMap.Currency);
             Assert.Equal(mapped.EffectiveDate, toMap.EffectiveDate);
             Assert.Equal(mapped.Mid, toMap.Mid);
+            Assert.Equal(mapped.Ask, toMap.Ask);
+            Assert.Equal(mapped.Bid, toMap.Bid);
         }
 
         [Fact]
@@ -56,8 +60,9 @@ namespace NBPApp.Tests
             Assert.Equal(mapped.Currency, toMap.Currency);
             Assert.Equal(mapped.EffectiveDate, toMap.EffectiveDate);
             Assert.Equal(mapped.Mid, (toMap.Bid + toMap.Ask) / 2);
+            Assert.Equal(mapped.Ask, toMap.Ask);
+            Assert.Equal(mapped.Bid, toMap.Bid);
+
         }
-
-
     }
 }
