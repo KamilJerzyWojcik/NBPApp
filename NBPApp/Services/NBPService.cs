@@ -7,7 +7,7 @@ namespace NBPApp.Services
 {
     public class NBPService : INBPService
     {
-        private TableType[] tableTypes => new TableType[] { TableType.A, TableType.B, TableType.C };
+        private TableType[] tableTypes => Enum.GetValues(typeof(TableType)) as TableType[];
 
         public NBPService(INBPApiClient nBPApiClient)
         {

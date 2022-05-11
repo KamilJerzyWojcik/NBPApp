@@ -13,10 +13,8 @@ namespace NBPApp.Models
         private HttpClient client;
         private Uri url(string tableType) => new Uri($"http://api.nbp.pl/api/exchangerates/tables/{tableType}");
         private Uri baseAdress => new Uri("http://api.nbp.pl/");
-
         public INBPHelper NBPHelper { get; }
         public IHttpClientFactory HttpClientFactory { get; }
-        public HttpResponseMessage CurrenctResponse { get; private set; }
 
         public NBPApiClient(INBPHelper nBPHelper, IHttpClientFactory httpClientFactory)
         {
